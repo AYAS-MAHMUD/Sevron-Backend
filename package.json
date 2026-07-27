@@ -7,7 +7,10 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "lint": "eslint ./src --ext .ts"
+    "lint": "eslint ./src --ext .ts",
+    "migrate" : "prisma migrate dev",
+    "generate" : "prisma generate",
+    "studio" : "prisma studio"
   },
   "keywords": [],
   "author": "",

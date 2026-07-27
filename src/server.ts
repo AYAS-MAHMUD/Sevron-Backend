@@ -1,7 +1,7 @@
 import http from "http";
 import app from "./app";
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 let server: http.Server;
 
@@ -13,36 +13,37 @@ async function bootstrap() {
       console.log(`Server Running On Port ${PORT}`);
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
 bootstrap();
 
 // Unhandled Rejection
-// process.on("unhandledRejection", (error) => {
-//   console.log("Unhandled Rejection Detected");
 
-//   if (server) {
-//     server.close(() => {
-//       process.exit(1);
-//     });
-//   }
+process.on("unhandledRejection", (error) => {
+  console.error("Unhandled Rejection Detected");
 
-//   process.exit(1);
-// });
+  if (server) {
+    server.close(() => {
+      process.exit(1);
+    });
+  }
 
-// // Uncaught Exception
-// process.on("uncaughtException", (error) => {
-//   console.log("Uncaught Exception Detected");
-//   process.exit(1);
-// });
+  process.exit(1);
+});
 
-// // SIGTERM
-// process.on("SIGTERM", () => {
-//   console.log("SIGTERM Received");
+// Uncaught Exception
+process.on("uncaughtException", (error) => {
+  console.log("Uncaught Exception Detected");
+  process.exit(1);
+});
 
-//   if (server) {
-//     server.close();
-//   }
-// });
+// SIGTERM
+process.on("SIGTERM", () => {
+  console.log("SIGTERM Received");
+
+  if (server) {
+    server.close();
+  }
+});

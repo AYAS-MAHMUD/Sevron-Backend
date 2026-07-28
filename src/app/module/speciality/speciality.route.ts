@@ -6,6 +6,7 @@ import { specilityController } from "./speciality.controller";
 const router = Router() ;
 
 router.post("/",specilityController.createSpeciality);
+router.get("/",specilityController.getSpeciality);
 
 
 

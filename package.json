@@ -8,9 +8,9 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "lint": "eslint ./src --ext .ts",
-    "migrate" : "prisma migrate dev",
-    "generate" : "prisma generate",
-    "studio" : "prisma studio"
+    "migrate": "prisma migrate dev",
+    "generate": "prisma generate",
+    "studio": "prisma studio"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +32,7 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "http-status": "^2.1.0",
+    "http-status-codes": "^2.3.0",
     "pg": "^8.22.0",
     "prisma": "^7.9.0"
   },

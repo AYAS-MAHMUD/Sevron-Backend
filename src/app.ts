@@ -3,6 +3,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import httpStatus from "http-status";
 import router from "./app/router/router";
+import { notFound } from "./app/lib/notFound";
+import globalErrorHandler from "./app/lib/globalErrorhandler";
 
 const app: Application = express();
 
@@ -31,27 +33,10 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/v1", router);
 
 // not found route
-app.use((req: Request, res: Response) => {
-  res.status(httpStatus.NOT_FOUND).json({
-    success: false,
-    message: "API Not Found",
-  });
-});
+app.use(notFound)
+
 
 // global error handler
-app.use(
-  (
-    err: any,
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    res.status(err?.statusCode || 500).json({
-      success: false,
-      message: err?.message || "Something went wrong",
-      error: err,
-    });
-  }
-);
+app.use(globalErrorHandler)
 
 export default app;

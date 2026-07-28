@@ -26,8 +26,42 @@ const getSpeciality = catchAsync(
         const result = await specialityService.getSpeciality() ;
 
         sendResponse(res,{
-            statusCode : 201,
+            statusCode : 200,
             message : "Speciality retrieved successfully",
+            success : true,
+            data : result
+        })
+    }  
+)
+
+
+
+const deleteSpeciality = catchAsync(
+    async(req : Request , res : Response) => {
+        const {id} = req.params;
+
+        const result = await specialityService.deleteSpeciality(id as string) ;
+
+        sendResponse(res,{
+            statusCode : 200,
+            message : "Speciality deleted successfully",
+            success : true,
+            data : result
+        })
+    }  
+)
+
+
+
+const updateSpeciality = catchAsync(
+    async(req : Request , res : Response) => {
+        const {id} = req.params;
+        const body = req.body;
+        const result = await specialityService.updateSpeciality(id as string, body) ;
+
+        sendResponse(res,{
+            statusCode : 200,
+            message : "Speciality updated successfully",
             success : true,
             data : result
         })
@@ -38,5 +72,6 @@ const getSpeciality = catchAsync(
 export const specilityController = {
     createSpeciality,
     getSpeciality,
-
+    deleteSpeciality,
+    updateSpeciality
 }

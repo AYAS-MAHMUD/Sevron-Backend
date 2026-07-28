@@ -8,6 +8,9 @@ const router = Router() ;
 router.post("/",specilityController.createSpeciality);
 router.get("/",specilityController.getSpeciality);
 
+router.delete("/:id",specilityController.deleteSpeciality);
+router.put("/:id",specilityController.updateSpeciality);
+
 
 
 export const specialityRouter = router ;

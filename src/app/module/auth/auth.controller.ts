@@ -12,8 +12,25 @@ const registerPatient = catchAsync(
         const result = await authService.registerPatient(body) ;
 
         sendResponse(res,{
-            statusCode : 200,
+            statusCode : 201,
             message : "User register successfully",
+            success : true,
+            data : result
+        })
+    }  
+)
+
+
+
+const loginUser = catchAsync(
+    async(req : Request , res : Response) => {
+
+        const body = req.body;
+        const result = await authService.loginUser(body) ;
+
+        sendResponse(res,{
+            statusCode : 200,
+            message : "User Login successfully",
             success : true,
             data : result
         })
@@ -23,5 +40,5 @@ const registerPatient = catchAsync(
 
 export const authController = {
     registerPatient,
-    
+    loginUser
 }

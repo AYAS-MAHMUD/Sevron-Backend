@@ -1,4 +1,4 @@
-import { Role, User } from "../../../generated/prisma/client";
+import { Role, User, UserStatus } from "../../../generated/prisma/client";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
 
@@ -30,9 +30,41 @@ const registerPatient = async(payload : IRegisterPatientPayload)=>{
 
 
     // })
+    return data
 }
+
+interface ILoginUser {
+    email : string,
+    password : string
+}
+
+const loginUser = async(payload : ILoginUser) =>{
+    const {email, password}  = payload ;
+
+    const data = await auth.api.signInEmail({
+        body : {
+            email,
+            password
+        }
+    })
+
+    if(data.user.status == UserStatus.BLOCKED){
+        throw new Error("User is Blocked");
+    }
+    if(data.user.status == UserStatus.DELETED){
+        throw new Error("User is Deleted");
+    }
+
+    return data
+}
+
+
+
+
+
+
 
 export const authService = {
     registerPatient,
-    
+    loginUser
 }

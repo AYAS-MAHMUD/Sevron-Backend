@@ -1,0 +1,27 @@
+import { Request, Response } from "express";
+import catchAsync from "../../lib/catchAsync";
+import { authService } from "./auth.service";
+import { sendResponse } from "../../lib/sendResponse";
+
+
+
+const registerPatient = catchAsync(
+    async(req : Request , res : Response) => {
+
+        const body = req.body;
+        const result = await authService.registerPatient(body) ;
+
+        sendResponse(res,{
+            statusCode : 200,
+            message : "User register successfully",
+            success : true,
+            data : result
+        })
+    }  
+)
+
+
+export const authController = {
+    registerPatient,
+    
+}

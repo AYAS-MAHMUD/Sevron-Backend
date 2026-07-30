@@ -7,7 +7,8 @@ export const notFound = (req: Request, res : Response)=>{
         message : "API NOT FOUND",
         error : {
             path : req.originalUrl,
-            message : "Your requested path is't FOUND"
+            message : "Your requested path is't FOUND",
+            method : req.method
         }
     })
-}
+} 

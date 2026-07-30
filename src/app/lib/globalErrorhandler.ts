@@ -3,6 +3,7 @@
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status-codes";
 import { Prisma } from "../../generated/prisma/client";
+import { config } from "../config/config";
 
 const globalErrorHandler = (
   err: any,
@@ -10,9 +11,14 @@ const globalErrorHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  console.log(err);
+
+
+  if(config.NODE_ENV == "development"){
+    console.log( )
+  }
+
+
   let statusCode: number = err.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
-  let success = false;
   let message = err.message || "Something went wrong!";
   let error = err;
 

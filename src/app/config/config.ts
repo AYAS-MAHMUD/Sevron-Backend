@@ -9,6 +9,7 @@ dotenv.config({path: path.join(process.cwd(), ".env"),});
 const requiredEnv = [
   "PORT",
   "DATABASE_URL",
+  'NODE_ENV'
 ] as const;
 
 requiredEnv.forEach((key) => {
@@ -18,6 +19,7 @@ requiredEnv.forEach((key) => {
 });
 
 export const config = Object.freeze({
+  NODE_ENV : process.env.NODE_ENV,
   PORT: Number(process.env.PORT),
   DATABASE_URL: process.env.DATABASE_URL!,
 });

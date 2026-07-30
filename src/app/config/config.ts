@@ -1,17 +1,23 @@
+
 import dotenv from "dotenv";
 import path from "path";
+import { AppError } from "../errorHelper/AppError";
+import { StatusCodes } from "http-status-codes";
 
-dotenv.config({ path: path.join(process.cwd(), ".env") });
+dotenv.config({path: path.join(process.cwd(), ".env"),});
 
-export const config = {
-  port: process.env.PORT,
-  node_env: process.env.NODE_ENV,
-  database_url : process.env.DATABASE_URL,
-  cloudinary_cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  cloudinary_api_key: process.env.CLOUDINARY_API_KEY,
-  cloudinary_api_secret: process.env.CLOUDINARY_API_SECRET,
-  jwt_access_secret: process.env.JWT_ACCESS_SECRET,
-  jwt_access_expires_in: process.env.JWT_ACCESS_EXPIRES_IN,
-  jwt_refresh_secret: process.env.JWT_REFRESH_SECRET,
-  jwt_refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN
-};
+const requiredEnv = [
+  "PORT",
+  "DATABASE_URL",
+] as const;
+
+requiredEnv.forEach((key) => {
+  if (!process.env[key]) {
+    throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR,`Missing environment variable: ${key}`);
+  }
+});
+
+export const config = Object.freeze({
+  PORT: Number(process.env.PORT),
+  DATABASE_URL: process.env.DATABASE_URL!,
+});

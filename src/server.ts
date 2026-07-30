@@ -2,6 +2,7 @@
 import http from "http"
 import app from "./app.js";
 import { prisma } from "./app/lib/prisma.js";
+import { config } from "./app/config/config.js";
 
 
 let server : http.Server ;
@@ -12,7 +13,7 @@ async function botstrap(){
     await prisma.$connect();
     console.log("Database Connected");
 
-    server = app.listen(3000,()=>{
+    server = app.listen(config.PORT,()=>{
       console.log("Server running successfully on port 3000");
     })
   } catch (error) {

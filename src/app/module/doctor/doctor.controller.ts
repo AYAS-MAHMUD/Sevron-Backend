@@ -1,0 +1,26 @@
+import { Request, Response } from "express";
+import catchAsync from "../../lib/catchAsync";
+import { doctorService } from "./doctor.service";
+import { sendResponse } from "../../lib/sendResponse";
+import { StatusCodes } from "http-status-codes";
+
+
+const getAllDoctors = catchAsync(
+    async(req : Request , res : Response) =>{
+
+        const result = await doctorService.getAllDoctors() ; 
+
+        sendResponse(res , {
+            statusCode : StatusCodes.OK,
+            success : true ,
+            message : "Doctor Retrieved successfully",
+            data : result
+        })
+    }
+)
+
+export const doctorController = {
+    getAllDoctors,
+
+    
+}

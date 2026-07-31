@@ -77,12 +77,15 @@ const loginUser = async (payload: ILoginUser) => {
     throw new Error("User is Deleted");
   }
 
-  const getUsertoken = UserTokens(data.user)
-  return {
-    data,
-    accessToken : getUsertoken.accessToken,
-    refreshToken : getUsertoken.refreshToken
-  };
+  // const getUsertoken = UserTokens(data.user)
+  
+  return data
+
+  // return {
+  //   data,
+    // accessToken : getUsertoken.accessToken,
+    // refreshToken : getUsertoken.refreshToken
+  // };
 };
 
 export const authService = {

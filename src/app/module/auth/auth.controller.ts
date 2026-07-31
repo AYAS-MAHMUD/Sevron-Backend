@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import catchAsync from "../../lib/catchAsync";
 import { authService } from "./auth.service";
 import { sendResponse } from "../../lib/sendResponse";
+import { setAccessTokenCookie, setRefreshTokenCookie } from "../../lib/token";
 
 
 
@@ -27,7 +28,10 @@ const loginUser = catchAsync(
 
         const body = req.body;
         const result = await authService.loginUser(body) ;
+        // const {accessToken , refreshToken} = result ;
 
+        // setAccessTokenCookie(res,accessToken);
+        // setRefreshTokenCookie(res,refreshToken);
         sendResponse(res,{
             statusCode : 200,
             message : "User Login successfully",

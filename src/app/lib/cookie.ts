@@ -1,10 +1,3 @@
-// res.cookie('refreshToken', userToken.refreshToken, {
-//         httpOnly: true,
-//         secure: config.node_env==="production",
-//         sameSite : "none"
-//       });
-
-
 
 import { CookieOptions, Request, Response } from "express";
 

@@ -29,19 +29,31 @@ export const UserTokens = (user: JwtPayload) => {
 
 
 
-// export const setAccessTokenCookie = (res : Response , token : string) =>{
-//     CookieUtils.setCookie(res,"accessToken", token , {
-//         httpOnly : true,
-//         secure : true,
-//         sameSite : "none",
-//         maxAge : 60 * 60 * 60 * 24
-//     })
-// }
-// export const setRefreshTokenCookie = (res : Response , token : string) =>{
-//     CookieUtils.setCookie(res,"refreshToken", token , {
-//         httpOnly : true,
-//         secure : true,
-//         sameSite : "none",
-//         maxAge : 60 * 60 * 60 * 24
-//     })
-// }
+export const setAccessTokenCookie = (res : Response , token : string) =>{
+    CookieUtils.setCookie(res,"accessToken", token , {
+        httpOnly : true,
+        secure : true,
+        sameSite : "none",
+        maxAge : 60 * 60 * 60 * 24
+    })
+}
+export const setRefreshTokenCookie = (res : Response , token : string) =>{
+    CookieUtils.setCookie(res,"refreshToken", token , {
+        httpOnly : true,
+        secure : true,
+        sameSite : "none",
+        maxAge : 60 * 60 * 60 * 24
+    })
+}
+
+
+export const setBetterAuthSessionCookie = (res: Response, token: string) => {
+    CookieUtils.setCookie(res, "better-auth.session_token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: '/',
+        //1 day
+        maxAge: 60 * 60 * 24 * 1000,
+    });
+}

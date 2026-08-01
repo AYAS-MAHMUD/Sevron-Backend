@@ -38,9 +38,19 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
         },
       });
     });
+
+    const getUsertoken = UserTokens(data.user)
+
+
+
+
     return {
       ...data,
       patient,
+      accessToken : getUsertoken.accessToken,
+    refreshToken : getUsertoken.refreshToken,
+
+
     };
   } catch (error) {
     console.log("Transaction Error happend :", error);
@@ -77,15 +87,16 @@ const loginUser = async (payload: ILoginUser) => {
     throw new Error("User is Deleted");
   }
 
-  // const getUsertoken = UserTokens(data.user)
+  const getUsertoken = UserTokens(data.user)
   
-  return data
 
-  // return {
-  //   data,
-    // accessToken : getUsertoken.accessToken,
-    // refreshToken : getUsertoken.refreshToken
-  // };
+
+  return {
+    data,
+    accessToken : getUsertoken.accessToken,
+    refreshToken : getUsertoken.refreshToken,
+    sessionToken : data.token
+  };
 };
 
 export const authService = {

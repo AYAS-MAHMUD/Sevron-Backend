@@ -37,6 +37,6 @@ app.use(notFound)
 
 
 // global error handler
-app.use(globalErrorHandler)
+// app.use(globalErrorHandler)
 
 export default app;

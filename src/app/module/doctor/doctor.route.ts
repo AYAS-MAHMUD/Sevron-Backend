@@ -12,6 +12,6 @@ const router = Router() ;
 router.get("/all-doctor",authCheck(Role.DOCTOR) ,doctorController.getAllDoctors)
 router.get("/:id",doctorController.getDoctorById);
 router.patch("/:id",validationRequest(updateDoctorValidationSchema),doctorController.updateDoctorBYId);
-// router.get("/:id",doctorController.deleteDoctor) // soft delete
+router.delete("/:id",doctorController.softDeleteDoctorById) // soft delete
 
 export const doctorRouter = router ;

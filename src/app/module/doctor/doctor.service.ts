@@ -8,6 +8,9 @@ import { Doctor } from "../../../generated/prisma/browser";
 
 const getAllDoctors  = async () =>{
     const doctors = await prisma.doctor.findMany({
+        where : {
+            isDeleted : false
+        },
         include : {
             user : true,
             specialties : {
@@ -17,7 +20,11 @@ const getAllDoctors  = async () =>{
             }
         }
     })
-    const totalDoctor = await prisma.doctor.count();
+    const totalDoctor = await prisma.doctor.count({
+         where : {
+            isDeleted : false
+        }
+    });
 
     return {
         doctors,
@@ -57,7 +64,7 @@ const updateDoctorBYId = async( id : string , payload : IUpdateDoctorPayload) =>
     if(!doctor){
         throw new AppError(StatusCodes.NOT_FOUND, "Doctor not found");
     }
-    console.log("user found")
+
 
     const updatedDoctor = await prisma.doctor.update({
         where : {
@@ -69,10 +76,35 @@ const updateDoctorBYId = async( id : string , payload : IUpdateDoctorPayload) =>
     return updatedDoctor
 }
 
+
+const softDeleteDoctorById = async( id : string ) =>{
+    const doctor = await prisma.doctor.findUnique({
+        where : {
+            id : id
+        } 
+    })
+    if(!doctor){
+        throw new AppError(StatusCodes.NOT_FOUND, "Doctor not found");
+    }
+
+
+    const softDeleteDoctor = await prisma.doctor.update({
+        where : {
+            id 
+        },
+        data : {
+            isDeleted : true,
+            deletedAt : new Date()
+        }
+    })
+
+    return softDeleteDoctor
+}
+
 export const doctorService = {
     getAllDoctors,
     getDoctorById,
     updateDoctorBYId,
-
+    softDeleteDoctorById
 
 }

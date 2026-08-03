@@ -7,8 +7,9 @@ import { createAdminZodSchema, createDoctorSchema } from "./user.validation";
 const router = Router()
 
 
-router.post("/create-doctor",validationRequest(createDoctorSchema),userController.createDoctor)
+router.post("/create-doctor",validationRequest(createDoctorSchema),userController.createDoctor);
 router.post("/create-admin" , validationRequest(createAdminZodSchema),userController.createAdmin);
+// router.post("/create-super-admin",validationRequest(),userController.createSuperAdmin);
 router.get("/all-users",userController.getAllUser);
 
 export const userRouter = router

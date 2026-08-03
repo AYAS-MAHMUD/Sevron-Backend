@@ -4,6 +4,7 @@ import { AppError } from "../../errorHelper/AppError";
 import { prisma } from "../../lib/prisma";
 import { ICreateAdminPayload, ICreateDoctorPayload } from "./user.interface";
 import { auth } from "../../lib/auth";
+import { config } from "../../config/config";
 
 const createDoctor = async (payload: ICreateDoctorPayload) => {
   // const result = await
@@ -122,44 +123,88 @@ const createDoctor = async (payload: ICreateDoctorPayload) => {
   }
 };
 
-const createAdmin = async (payload : ICreateAdminPayload) => {
-    console.log("service : ",payload)
-    const isAdminExits = await prisma.user.findUnique({
-        where : {
-            email : payload.admin.email
-        }
-    })
-    if(isAdminExits){
-        throw new AppError(StatusCodes.CONFLICT,"Admin already Exit");
-    }
-    console.log("user not found")
-    const userData = await auth.api.signUpEmail({
-        body : {
-            ...payload.admin,
-            password : payload.password,
-            role : payload.role,
-            needPasswordChange : true
-        }
-    })
-    try {
-        const adminData = await prisma.admin.create({
-            data : {
-                userId : userData.user.id,
-                ...payload.admin
-            }
-        })
-        return adminData
-    } catch (error) {
-          console.log("Error creating admin: ", error);
-        await prisma.user.delete({
-            where: {
-                id: userData.user.id
-            }
-        })
-        throw error;
-    }
-
+const createAdmin = async (payload: ICreateAdminPayload) => {
+  console.log("service : ", payload);
+  const isAdminExits = await prisma.user.findUnique({
+    where: {
+      email: payload.admin.email,
+    },
+  });
+  if (isAdminExits) {
+    throw new AppError(StatusCodes.CONFLICT, "Admin already Exit");
+  }
+  console.log("user not found");
+  const userData = await auth.api.signUpEmail({
+    body: {
+      ...payload.admin,
+      password: payload.password,
+      role: payload.role,
+      needPasswordChange: true,
+    },
+  });
+  try {
+    const adminData = await prisma.admin.create({
+      data: {
+        userId: userData.user.id,
+        ...payload.admin,
+      },
+    });
+    return adminData;
+  } catch (error) {
+    console.log("Error creating admin: ", error);
+    await prisma.user.delete({
+      where: {
+        id: userData.user.id,
+      },
+    });
+    throw error;
+  }
 };
+
+// const createSuperAdmin = async (payload : any) => {
+
+
+//   const userExit = await prisma.user.findUnique({
+//     where: {
+//       email: email,
+//     },
+//   });
+//   if (userExit) {
+//     console.log("✅ Super Admin already exists");
+//     return;
+//   }
+
+
+//   const superAdminData = await auth.api.signUpEmail({
+//     body : {
+//         name : "SUPER_ADMIN",
+//         email : email,
+//         password : password,
+//         role : Role.SUPER_ADMIN
+//     }
+//   })
+
+//   try {
+//     const adminData = await prisma.admin.create({
+//       data: {
+//         userId: superAdminData.user.id,
+//         name : "SUPER_ADMIN",
+//         email : email,
+
+
+//       },
+//     });
+//     return adminData;
+//   } catch (error) {
+//     console.log("Error creating admin: ", error);
+//     await prisma.user.delete({
+//       where: {
+//         id: userData.user.id,
+//       },
+//     });
+//     throw error;
+//   }
+// };
 
 const getAllUser = async () => {
   const result = await prisma.user.findMany();
@@ -175,4 +220,5 @@ export const userService = {
   createDoctor,
   getAllUser,
   createAdmin,
+//   createSuperAdmin,
 };

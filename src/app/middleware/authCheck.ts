@@ -11,6 +11,7 @@ export const authCheck  = (...rules : string[]) =>
     try {
         
         const accessToken = req.cookies.accessToken ;
+        console.log(accessToken)
         if(!accessToken){
             throw new AppError(StatusCodes.NOT_FOUND, "Access Token not found")
         }
@@ -20,6 +21,7 @@ export const authCheck  = (...rules : string[]) =>
         config.JWT_ACCESS_SECRET as string,
       );
 
+      console.log(verifiedToken)
 
       if (!rules.includes((verifiedToken as JwtPayload).role)) {
         throw new AppError(StatusCodes.FORBIDDEN, "Unauthorized Access");
@@ -34,3 +36,8 @@ export const authCheck  = (...rules : string[]) =>
         next(error)
     }
 }
+
+
+
+
+

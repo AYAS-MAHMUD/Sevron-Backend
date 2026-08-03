@@ -9,5 +9,6 @@ const router = Router()
 
 router.post("/create-doctor",validationRequest(createDoctorSchema),userController.createDoctor)
 
+router.get("/all-users",userController.getAllUser);
 
 export const userRouter = router

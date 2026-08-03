@@ -132,7 +132,17 @@ const createDoctor = async (payload : ICreateDoctorPayload) =>{
 }
 
 
+const getAllUser = async () =>{
+    const result = await prisma.user.findMany();
+    const totalUser = await prisma.user.count();
+
+    return {
+        totalUser,
+        result 
+    }
+}
+
 export const userService = {
     createDoctor,
-
+getAllUser,
 }

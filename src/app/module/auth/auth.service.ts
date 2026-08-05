@@ -4,6 +4,7 @@ import { AppError } from "../../errorHelper/AppError";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
 import { UserTokens } from "../../lib/token";
+import { IRequestUser } from "./auth.interface";
 
 interface IRegisterPatientPayload {
   name: string;
@@ -39,18 +40,13 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
       });
     });
 
-    const getUsertoken = UserTokens(data.user)
-
-
-
+    const getUsertoken = UserTokens(data.user);
 
     return {
       ...data,
       patient,
-      accessToken : getUsertoken.accessToken,
-    refreshToken : getUsertoken.refreshToken,
-
-
+      accessToken: getUsertoken.accessToken,
+      refreshToken: getUsertoken.refreshToken,
     };
   } catch (error) {
     console.log("Transaction Error happend :", error);
@@ -87,19 +83,51 @@ const loginUser = async (payload: ILoginUser) => {
     throw new Error("User is Deleted");
   }
 
-  const getUsertoken = UserTokens(data.user)
-  
-
+  const getUsertoken = UserTokens(data.user);
 
   return {
     data,
-    accessToken : getUsertoken.accessToken,
-    refreshToken : getUsertoken.refreshToken,
-    sessionToken : data.token
+    accessToken: getUsertoken.accessToken,
+    refreshToken: getUsertoken.refreshToken,
+    sessionToken: data.token,
   };
+};
+
+const getMe = async (user: any) => {
+  const isUserExits = await prisma.user.findUnique({
+    where: {
+      id: user.userId,
+    },
+    include: {
+      patient: {
+        include: {
+          appointments: true,
+          reviews: true,
+          prescriptions: true,
+          medicalReports: true,
+          patientHealthData: true,
+        },
+      },
+      doctor: {
+        include: {
+          specialties: true,
+          appointments: true,
+          reviews: true,
+          prescriptions: true,
+        },
+      },
+      admin: true,
+    },
+  });
+  if(!isUserExits){
+    throw new AppError(StatusCodes.NOT_FOUND, "User not found");
+  }
+
+  return isUserExits
 };
 
 export const authService = {
   registerPatient,
   loginUser,
+  getMe,
 };

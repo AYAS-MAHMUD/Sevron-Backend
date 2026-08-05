@@ -9,9 +9,9 @@ import { updateDoctorValidationSchema } from "./doctor.validation";
 
 const router = Router() ;
 
-router.get("/all-doctor",authCheck(Role.DOCTOR) ,doctorController.getAllDoctors)
-router.get("/:id",doctorController.getDoctorById);
-router.patch("/:id",validationRequest(updateDoctorValidationSchema),doctorController.updateDoctorBYId);
-router.delete("/:id",doctorController.softDeleteDoctorById) // soft delete
+router.get("/all-doctor",authCheck(Role.ADMIN, Role.SUPER_ADMIN) ,doctorController.getAllDoctors)
+router.get("/:id",authCheck(Role.ADMIN, Role.SUPER_ADMIN),doctorController.getDoctorById);
+router.patch("/:id",authCheck(Role.ADMIN, Role.SUPER_ADMIN),validationRequest(updateDoctorValidationSchema),doctorController.updateDoctorBYId);
+router.delete("/:id",authCheck(Role.ADMIN, Role.SUPER_ADMIN),doctorController.softDeleteDoctorById) // soft delete
 
 export const doctorRouter = router ;

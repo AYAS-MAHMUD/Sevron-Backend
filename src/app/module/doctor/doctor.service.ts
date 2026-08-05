@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { AppError } from "../../errorHelper/AppError";
 import { prisma } from "../../lib/prisma"
 import { IUpdateDoctorPayload } from "./doctor.interface";
-import { Doctor } from "../../../generated/prisma/browser";
+import { Doctor, UserStatus } from "../../../generated/prisma/browser";
 
 
 
@@ -87,8 +87,8 @@ const softDeleteDoctorById = async( id : string ) =>{
         throw new AppError(StatusCodes.NOT_FOUND, "Doctor not found");
     }
 
-
-    const softDeleteDoctor = await prisma.doctor.update({
+    await prisma.$transaction(async (tx) =>{
+    await tx.doctor.update({
         where : {
             id 
         },
@@ -97,8 +97,33 @@ const softDeleteDoctorById = async( id : string ) =>{
             deletedAt : new Date()
         }
     })
+    await tx.user.update({
+        where : {
+            id : doctor.userId
+        },
+        data :{
+            isDeleted : true,
+            deletedAt : new Date(),
+            status : UserStatus.DELETED
+        }
+    })
+    await tx.session.deleteMany({
+        where : {
+            id : doctor.userId
+        }
+    })
+    await tx.doctorSpecialty.deleteMany({
+        where : {
+            doctorId : doctor.id
+        }
+    })
 
-    return softDeleteDoctor
+
+    })
+
+
+
+    return { message : "Doctor deleted successfully"}
 }
 
 export const doctorService = {

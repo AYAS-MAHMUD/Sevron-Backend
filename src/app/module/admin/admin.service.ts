@@ -1,3 +1,5 @@
+import { StatusCodes } from "http-status-codes"
+import { AppError } from "../../errorHelper/AppError"
 import { prisma } from "../../lib/prisma"
 
 
@@ -37,10 +39,52 @@ const getAdminById = async (id : string) =>{
     return admin
 }
 
+const updateAdminById = async (id : string , payload : any) =>{
+    const admin = await prisma.admin.findUnique({
+        where : {
+            id : id
+        }
+    })
+    if(!admin){
+        throw new AppError(StatusCodes.NOT_FOUND, "Admin not found");
+    }
 
+    const updatedAdmin = await prisma.admin.update({
+        where : {
+            id : id
+        },
+        data : payload
+    })
+    return updatedAdmin
+}
+
+
+const softDeleteAdminById = async (id : string) =>{
+    const admin = await prisma.admin.findUnique({
+        where : {
+            id : id
+        }
+    })
+    if(!admin){
+        throw new AppError(StatusCodes.NOT_FOUND, "Admin not found");
+    }
+
+     const deletedAdmin = await prisma.admin.update({
+        where : {
+            id : id
+        },
+        data : {
+            isDeleted : true,
+            deletedAt : new Date()
+        }
+    })
+    return deletedAdmin
+}
 
 
 export const adminService = {
     getAllAdmins,
-getAdminById
+getAdminById,
+updateAdminById,
+softDeleteAdminById
 }

@@ -95,6 +95,16 @@ const loginUser = async (payload: ILoginUser) => {
   };
 };
 
+
+const logoutUser = async (sessionToken : any) =>{
+  const result = await auth.api.signOut({
+    headers : new Headers({
+      Authorization : `Bearer ${sessionToken}`
+    })
+  })
+  return result;
+}
+
 const getMe = async (user: any) => {
   const isUserExits = await prisma.user.findUnique({
     where: {
@@ -187,7 +197,7 @@ const changePassword = async (sessionToken : any , currentPassword : string , ne
   if(!session){
     throw new AppError(StatusCodes.UNAUTHORIZED, "Invalid session token");
   }
-
+  console.log("session" , session.user)
   const isPasswordChanged = await auth.api.changePassword({
     body : {
       currentPassword,
@@ -201,9 +211,14 @@ const changePassword = async (sessionToken : any , currentPassword : string , ne
   console.log("pass change hosse na")
   if(!isPasswordChanged){
     throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to change password");
-  }
+  } 
 
-  return {message : "Password changed successfully"};
+  const token = UserTokens(session.user);
+  return {
+    ...isPasswordChanged,
+    accessToken : token.accessToken,
+    refreshToken : token.refreshToken
+  };
 
 }
 export const authService = {
@@ -211,5 +226,6 @@ export const authService = {
   loginUser,
   getMe,
   getNewToken,
-  changePassword
+  changePassword,
+  logoutUser
 };

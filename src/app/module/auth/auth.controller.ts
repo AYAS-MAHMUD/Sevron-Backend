@@ -36,6 +36,8 @@ const getMe = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const logoutUser = catchAsync(async (req: Request, res: Response) => {
+  const betterAuthToken = req.cookies["better-auth.session_token"];
+  const result = await authService.logoutUser(betterAuthToken);
   res.clearCookie("accessToken", {
     httpOnly: true,
     secure: true,
@@ -56,7 +58,7 @@ const logoutUser = catchAsync(async (req: Request, res: Response) => {
     statusCode: 200,
     message: "User Login successfully",
     success: true,
-    data: null,
+    data: result,
   });
 });
 const loginUser = catchAsync(async (req: Request, res: Response) => {
@@ -103,6 +105,11 @@ const changePassword = catchAsync(async (req: Request, res: Response) => {
   const {oldPassword , newPassword} = req.body;
 
   const result = await authService.changePassword(sessionToken , oldPassword , newPassword);
+  const {accessToken , refreshToken , token} = result;
+  setAccessTokenCookie(res, accessToken);
+  setRefreshTokenCookie(res, refreshToken);
+  setBetterAuthSessionCookie(res , token as string);
+
   sendResponse(res, {
     statusCode: 200,
     message: "Password changed successfully",

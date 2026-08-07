@@ -79,10 +79,15 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
 
 const getNewToken = catchAsync(async (req: Request, res: Response) => {
 
+
     const refreshToken = req.cookies.refreshToken;
-    // const sessionToken = req.cookies.betterauth.session_token;
-;
-    const result = await authService.getNewToken(refreshToken)
+    const betterAuthToken = req.cookies["better-auth.session_token"];
+
+    const result = await authService.getNewToken(refreshToken, betterAuthToken);
+    setAccessTokenCookie(res , result.accessToken);
+    setRefreshTokenCookie(res , result.refreshToken);
+    setBetterAuthSessionCookie(res , result.sessionToken);
+
   sendResponse(res, {
     statusCode: 200,
     message: "User Login successfully",

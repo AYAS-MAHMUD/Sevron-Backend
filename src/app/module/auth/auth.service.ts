@@ -128,24 +128,51 @@ const getMe = async (user: any) => {
   return isUserExits
 };
 
-const getNewToken = async (refreshToken : string ) =>{
+const getNewToken = async (refreshToken : string , sessionToken : string ) =>{
+  // console.log("refreshToken : ", refreshToken)
+  // console.log("sessionToken : ", sessionToken)
+  const isSessionToken = await prisma.session.findUnique({
+    where : {
+      token : sessionToken
+    },
+    include : {
+      user : true
+    }
+  })
+  if(!isSessionToken){
+    throw new AppError(StatusCodes.UNAUTHORIZED , "Invalid session token");
+  }
  
+
     const verifyRefreshToken = jwt.verify(refreshToken, config.JWT_REFRESH_SECRET as string);
     if(!verifyRefreshToken){
       throw new AppError(StatusCodes.UNAUTHORIZED, "Invalid refresh token");
     }
-
+   
   
   const isUserExits = await prisma.user.findUnique({
     where : {
       email : (verifyRefreshToken as jwt.JwtPayload).email
     }
   })
+  
 
-  console.log(isUserExits, "user found")
-
+  const {token} = await prisma.session.update({
+    where : {
+      token : sessionToken 
+    },
+    data : {
+      token : sessionToken,
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      updatedAt : new Date()
+    }
+  })
+  
   const accessToken = UserTokens(isUserExits as JwtPayload);
-  return {accessToken : accessToken.accessToken}
+  
+  return {accessToken : accessToken.accessToken,
+     refreshToken : accessToken.refreshToken
+    , sessionToken : token }
 
 }
 

@@ -176,9 +176,40 @@ const getNewToken = async (refreshToken : string , sessionToken : string ) =>{
 
 }
 
+
+const changePassword = async (sessionToken : any , currentPassword : string , newPassword : string) =>{
+  
+  const session = await auth.api.getSession({
+    headers : new Headers({
+      Authorization : `Bearer ${sessionToken}`
+    })
+  })
+  if(!session){
+    throw new AppError(StatusCodes.UNAUTHORIZED, "Invalid session token");
+  }
+
+  const isPasswordChanged = await auth.api.changePassword({
+    body : {
+      currentPassword,
+      newPassword , 
+      revokeOtherSessions : true
+    },
+     headers : new Headers({
+      Authorization : `Bearer ${sessionToken}`
+    })
+  })
+  console.log("pass change hosse na")
+  if(!isPasswordChanged){
+    throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to change password");
+  }
+
+  return {message : "Password changed successfully"};
+
+}
 export const authService = {
   registerPatient,
   loginUser,
   getMe,
-  getNewToken
+  getNewToken,
+  changePassword
 };

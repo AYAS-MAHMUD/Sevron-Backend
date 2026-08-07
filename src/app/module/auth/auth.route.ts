@@ -13,4 +13,5 @@ router.post("/logout", authController.logoutUser);
 router.get("/me",authCheck(...Object.values(Role)),authController.getMe)
 
 router.post("/refreshToken", authController.getNewToken)
+router.post("/changePassword",authCheck(...Object.values(Role)),authController.changePassword);
 export const authRouter = router ;

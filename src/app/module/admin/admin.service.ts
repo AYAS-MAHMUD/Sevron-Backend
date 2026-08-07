@@ -53,7 +53,17 @@ const updateAdminById = async (id: string, payload: any) => {
   return updatedAdmin;
 };
 
-const softDeleteAdminById = async (id: string) => {
+// {
+//   userId: 'RqbUy45OXRMfnYiN5Ac87D9w1DBjubO1',
+//   email: 'tanvir.admin@example.com',
+//   role: 'ADMIN',
+//   iat: 1786084160,
+//   exp: 1786170560
+// }
+
+
+const softDeleteAdminById = async (id: string , user : any) => {
+
   const admin = await prisma.admin.findUnique({
     where: {
       id: id,
@@ -61,6 +71,10 @@ const softDeleteAdminById = async (id: string) => {
   });
   if (!admin) {
     throw new AppError(StatusCodes.NOT_FOUND, "Admin not found");
+  }
+
+  if(user.email === admin.email){
+    throw new AppError(StatusCodes.BAD_REQUEST , "Admin can't delete own account")
   }
 
   const deletedAdmin = await prisma.admin.update({
@@ -81,3 +95,5 @@ export const adminService = {
   updateAdminById,
   softDeleteAdminById,
 };
+
+

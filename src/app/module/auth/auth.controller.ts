@@ -76,9 +76,25 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+
+const getNewToken = catchAsync(async (req: Request, res: Response) => {
+
+    const refreshToken = req.cookies.refreshToken;
+    // const sessionToken = req.cookies.betterauth.session_token;
+;
+    const result = await authService.getNewToken(refreshToken)
+  sendResponse(res, {
+    statusCode: 200,
+    message: "User Login successfully",
+    success: true,
+    data: result,
+  });
+});
+
 export const authController = {
   registerPatient,
   loginUser,
   getMe,
   logoutUser,
+  getNewToken
 };

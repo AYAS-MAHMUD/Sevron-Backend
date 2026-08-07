@@ -21,7 +21,7 @@ export const authCheck  = (...rules : string[]) =>
         config.JWT_ACCESS_SECRET as string,
       );
 
-      console.log(verifiedToken)
+      
 
       if (!rules.includes((verifiedToken as JwtPayload).role)) {
         throw new AppError(StatusCodes.FORBIDDEN, "Unauthorized Access");

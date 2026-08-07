@@ -4,7 +4,9 @@ import { AppError } from "../../errorHelper/AppError";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
 import { UserTokens } from "../../lib/token";
-import { IRequestUser } from "./auth.interface";
+
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { config } from "../../config/config";
 
 interface IRegisterPatientPayload {
   name: string;
@@ -126,8 +128,30 @@ const getMe = async (user: any) => {
   return isUserExits
 };
 
+const getNewToken = async (refreshToken : string ) =>{
+ 
+    const verifyRefreshToken = jwt.verify(refreshToken, config.JWT_REFRESH_SECRET as string);
+    if(!verifyRefreshToken){
+      throw new AppError(StatusCodes.UNAUTHORIZED, "Invalid refresh token");
+    }
+
+  
+  const isUserExits = await prisma.user.findUnique({
+    where : {
+      email : (verifyRefreshToken as jwt.JwtPayload).email
+    }
+  })
+
+  console.log(isUserExits, "user found")
+
+  const accessToken = UserTokens(isUserExits as JwtPayload);
+  return {accessToken : accessToken.accessToken}
+
+}
+
 export const authService = {
   registerPatient,
   loginUser,
   getMe,
+  getNewToken
 };

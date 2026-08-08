@@ -197,7 +197,7 @@ const changePassword = async (sessionToken : any , currentPassword : string , ne
   if(!session){
     throw new AppError(StatusCodes.UNAUTHORIZED, "Invalid session token");
   }
-  console.log("session" , session.user)
+  // console.log("session" , session.user)
   const isPasswordChanged = await auth.api.changePassword({
     body : {
       currentPassword,
@@ -208,7 +208,7 @@ const changePassword = async (sessionToken : any , currentPassword : string , ne
       Authorization : `Bearer ${sessionToken}`
     })
   })
-  console.log("pass change hosse na")
+  // console.log("pass change hosse na")
   if(!isPasswordChanged){
     throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to change password");
   } 
@@ -221,11 +221,32 @@ const changePassword = async (sessionToken : any , currentPassword : string , ne
   };
 
 }
+
+
+const verifyEmailOTP = async (email : string , otp : string) =>{
+  const result = await auth.api.verifyEmailOTP({
+    body : {
+      email,
+      otp
+    }
+  })
+  if(result.status && !result.user.emailVerified){
+    await prisma.user.update({
+      where : {
+        email
+      },
+      data : {
+        emailVerified : true
+      }
+    })
+  }
+}
 export const authService = {
   registerPatient,
   loginUser,
   getMe,
   getNewToken,
   changePassword,
-  logoutUser
+  logoutUser,
+  verifyEmailOTP
 };

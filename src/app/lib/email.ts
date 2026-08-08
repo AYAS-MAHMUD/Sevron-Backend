@@ -7,7 +7,7 @@ import ejs from "ejs"
 export const transporter = nodemailer.createTransport({
   host: config.smtp.host,
   port: Number(config.smtp.port),
-  secure: false, // true for 465, false for 587
+  secure: true, // true for 465, false for 587
   auth: {
     user: config.smtp.smtp_user,
     pass: config.smtp.smtp_pass,
@@ -36,7 +36,7 @@ export const sendEmail = async ({
 }: sendEmailOption)=>{
     try {
     const templatePath = path.resolve(process.cwd() ,`src/app/templates/${templateName}.ejs`);
-    
+
     const html = await ejs.renderFile(templatePath,templateData);
 
     const info = await transporter.sendMail({

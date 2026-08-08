@@ -119,11 +119,27 @@ const changePassword = catchAsync(async (req: Request, res: Response) => {
 });
 
 
+const verifyEmailOTP = catchAsync(async (req: Request, res: Response) => {
+
+  const {email ,otp } = req.body ;
+  await authService.verifyEmailOTP(email , otp);
+
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Email verified successfully",
+    success: true,
+    data : null
+
+  });
+});
+
+
 export const authController = {
   registerPatient,
   loginUser,
   getMe,
   logoutUser,
   getNewToken,
-  changePassword
+  changePassword,
+  verifyEmailOTP
 };

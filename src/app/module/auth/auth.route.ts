@@ -14,4 +14,7 @@ router.get("/me",authCheck(...Object.values(Role)),authController.getMe)
 
 router.post("/refreshToken", authController.getNewToken)
 router.post("/changePassword",authCheck(...Object.values(Role)),authController.changePassword);
+
+
+router.post("/verify-email", authController.verifyEmailOTP);
 export const authRouter = router ;

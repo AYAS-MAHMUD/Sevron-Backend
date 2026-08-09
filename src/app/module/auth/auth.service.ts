@@ -241,6 +241,75 @@ const verifyEmailOTP = async (email : string , otp : string) =>{
     })
   }
 }
+
+
+const forgotPassword = async (email : string) =>{
+  const user = await prisma.user.findUnique({
+    where :{
+       email
+    }
+  })
+      if(!user){
+        throw new AppError(StatusCodes.NOT_FOUND, "User not found");
+    }
+
+    if(!user.emailVerified){
+        throw new AppError(StatusCodes.BAD_REQUEST, "Email not verified");
+    }
+
+    if(user.isDeleted || user.status === UserStatus.DELETED){
+        throw new AppError(StatusCodes.NOT_FOUND, "User not found"); 
+    }
+    await auth.api.requestPasswordResetEmailOTP({
+        body:{
+            email,
+        }
+    })
+}
+
+const resetPassword = async (email : string, otp : string, newPassword : string) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            email,
+        }
+    })
+      if(!user){
+        throw new AppError(StatusCodes.NOT_FOUND, "User not found");
+    }
+
+    if(!user.emailVerified){
+        throw new AppError(StatusCodes.BAD_REQUEST, "Email not verified");
+    }
+
+    if(user.isDeleted || user.status === UserStatus.DELETED){
+        throw new AppError(StatusCodes.NOT_FOUND, "User not found"); 
+    }
+
+    await auth.api.resetPasswordEmailOTP({
+        body:{
+            email,
+            otp,
+            password : newPassword,
+        }
+    })
+
+    if (user.needPasswordChange) {
+        await prisma.user.update({
+            where: {
+                id: user.id,
+            },
+            data: {
+                needPasswordChange: false,
+            }
+        })
+    }
+
+    await prisma.session.deleteMany({
+        where:{
+            userId : user.id,
+        }
+    })
+}
 export const authService = {
   registerPatient,
   loginUser,
@@ -248,5 +317,8 @@ export const authService = {
   getNewToken,
   changePassword,
   logoutUser,
-  verifyEmailOTP
+  verifyEmailOTP,
+  forgotPassword ,
+  resetPassword
+
 };

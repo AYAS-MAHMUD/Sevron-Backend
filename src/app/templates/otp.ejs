@@ -1,2 +1,55 @@
-<h2>Hello <%= name %></h2>
-<p>Your OTP is <b><%= otp %></b>. It will expire in 2 minutes.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OTP Verification</title>
+</head>
+
+<body style="margin: 0; padding: 0; background-color: #f4f7fb; font-family: Arial, sans-serif;">
+
+  <div style="
+    max-width: 500px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  ">
+
+    <h2 style="color: #2563eb; margin-bottom: 10px;">
+      Hello <%= name %> 👋
+    </h2>
+
+    <p style="color: #555; font-size: 15px;">
+      Use the OTP below to verify your account.
+    </p>
+
+    <div style="
+      margin: 25px 0;
+      padding: 15px;
+      background-color: #eff6ff;
+      border: 2px dashed #2563eb;
+      border-radius: 8px;
+      font-size: 30px;
+      font-weight: bold;
+      letter-spacing: 8px;
+      color: #2563eb;
+    ">
+      <%= otp %>
+    </div>
+
+    <p style="color: #777; font-size: 14px;">
+      This OTP will expire in <strong>2 minutes</strong>.
+    </p>
+
+    <p style="color: #999; font-size: 12px; margin-top: 25px;">
+      🔒 Never share this OTP with anyone.
+    </p>
+
+  </div>
+
+</body>
+</html>
+

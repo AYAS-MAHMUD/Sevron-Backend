@@ -5,3 +5,16 @@ export interface IRequestUser{
     role : Role;
     email : string;
 }
+
+
+export interface ILoginUser {
+  email: string;
+  password: string;
+}
+
+
+export interface IRegisterPatientPayload {
+  name: string;
+  email: string;
+  password: string;
+}

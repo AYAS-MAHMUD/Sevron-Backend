@@ -5,9 +5,12 @@ import { Role, UserStatus } from "../../generated/prisma/enums";
 import { bearer } from "better-auth/plugins/bearer";
 import { emailOTP } from "better-auth/plugins";
 import { sendEmail } from "./email";
+import { config } from "../config/config";
 // If your Prisma file is located elsewhere, you can change the path
 
 export const auth = betterAuth({
+    baseURL : config.better_auth_url,
+    secret : config.better_auth_secret, 
     database: prismaAdapter(prisma, {
         provider: "postgresql", // or "mysql", "postgresql", ...etc
     }),
@@ -101,12 +104,49 @@ export const auth = betterAuth({
         cookieCache : {
             enabled : true,
         }
+    },
+    socialProviders :{
+        google : {
+            clientId : config.google.google_client_id as string,
+            clientSecret :  config.google.google_client_secret as string,
+            mapProfileToUser : () =>{
+                return {
+                    role : Role.PATIENT,
+                    status : UserStatus.ACTIVE,
+                    needPasswordChange : false,
+                    emailVerified : true,
+                    isDeleted : false,
+                    deletedAt : null
+                }
+            }
+        }
+    },
+    // redirectURLs :{
+    //     signIn : ""
+    // },
+    advanced : {
+        useSecureCookies : false,
+        cookies : {
+            state : {
+                attributes : {
+                    sameSite : "none",
+                    secure : true,
+                    httpOnly : true,
+                    path : "/"
+                }
+            },
+            sessionToken : {
+                attributes : {
+                    sameSite : "none",
+                    secure : true,
+                    httpOnly : true,
+                    path : "/"
+                }
+            }
+        }
     }
+    // after writing social provider and advance you have to go app.ts and add app.use("/api/auth",toNodeHandler(aut
+    
 
-    // socialProviders : {
-    //     google : {
-    //         clientId : ,
-    //         clientSecret, 
-    //     }
-    // }
+
 });

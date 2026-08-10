@@ -20,4 +20,15 @@ router.post("/verify-email", authController.verifyEmailOTP);
 
 router.post("/forgot-password", authController.forgotPassword);
 router.post("/reset-password", authController.resetPassword);
+
+
+// router.post("/send-any-email", authController.sendanyEmail)
+
+
+// For google login
+router.get("/login/google",authController.googleLogin);
+router.get("/google/success",authController.googleLoginSuccess)
+router.get("/oauth/error", authController.handleOAuthError);
+
+ 
 export const authRouter = router ;

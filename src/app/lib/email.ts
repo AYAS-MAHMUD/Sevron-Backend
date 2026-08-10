@@ -13,8 +13,6 @@ export const transporter = nodemailer.createTransport({
     pass: config.smtp.smtp_pass,
   },
 });
-
-
 interface sendEmailOption {
     to : string,
     subject : string,
@@ -26,7 +24,6 @@ interface sendEmailOption {
         contentType : string
     }[]
 }
-
 export const sendEmail = async ({
     to,
     subject,

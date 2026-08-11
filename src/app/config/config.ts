@@ -26,6 +26,9 @@ const requiredEnv = [
   "GOOGLE_CALLBACK_URL",
   "BETTER_AUTH_URL",
   "BETTER_AUTH_SECRET",
+  "CLOUDINARY_CLOUD_NAME",
+  "CLOUDINARY_API_KEY",
+  "CLOUDINARY_API_SECRET",
 ] as const;
 
 requiredEnv.forEach((key) => {
@@ -42,7 +45,7 @@ export const config = Object.freeze({
   PORT: Number(process.env.PORT),
   DATABASE_URL: process.env.DATABASE_URL!,
   better_auth_url: process.env.BETTER_AUTH_URL,
-  frontend_url : process.env.FRONTEND_URL,
+  frontend_url: process.env.FRONTEND_URL,
   better_auth_secret: process.env.BETTER_AUTH_SECRET,
   JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET,
   JWT_ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN,
@@ -62,5 +65,10 @@ export const config = Object.freeze({
     google_client_secret: process.env.GOOGLE_CLIENT_SECRET,
     frontend_url: process.env.FRONTEND_URL,
     google_callback_url: process.env.GOOGLE_CALLBACK_URL,
+  },
+  cloudinary: {
+    cloudinary_cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    cloudinary_api_key: process.env.CLOUDINARY_API_KEY,
+    cloudinary_api_secret: process.env.CLOUDINARY_API_SECRET,
   },
 });

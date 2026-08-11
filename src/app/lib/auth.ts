@@ -121,9 +121,9 @@ export const auth = betterAuth({
             }
         }
     },
-    // redirectURLs :{
-    //     signIn : ""
-    // },
+    redirectURLs :{
+         signIn : `${config.better_auth_url  }/api/v1/auth/google/success`,
+    },
     advanced : {
         useSecureCookies : false,
         cookies : {

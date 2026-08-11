@@ -1,11 +1,14 @@
 import { Router } from "express";
 import { specilityController } from "./speciality.controller";
+import { multerUpload } from "../../config/multer.config";
+import validationRequest from "../../middleware/validateRequest";
+import { createSpecialtySchema } from "./speciality.validation";
 
 
 
 const router = Router() ;
 
-router.post("/",specilityController.createSpeciality);
+router.post("/",multerUpload.single("file"),validationRequest(createSpecialtySchema),specilityController.createSpeciality);
 router.get("/",specilityController.getSpeciality);
 
 router.delete("/:id",specilityController.deleteSpeciality);

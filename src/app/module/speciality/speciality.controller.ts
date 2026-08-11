@@ -7,8 +7,13 @@ import { sendResponse } from "../../lib/sendResponse";
 
 const createSpeciality = catchAsync(
     async(req : Request , res : Response) => {
-        const body = req.body ;
-        const result = await specialityService.createSpeciality(body) ;
+
+          const payload = {
+            ...req.body,
+            icon : req.file?.path
+          }
+
+        const result = await specialityService.createSpeciality(payload) ;
 
         sendResponse(res,{
             statusCode : 201,

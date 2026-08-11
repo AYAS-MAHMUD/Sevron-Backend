@@ -6,7 +6,11 @@ import { prisma } from "../../lib/prisma"
 const createSpeciality = async (payload: Specialty): Promise<Specialty> => {
 
     const specialty = await prisma.specialty.create({
-        data: payload
+        data: {
+            title : payload.title,
+            description : payload.description,
+            icon : payload.icon
+        }
     })
 
     return specialty;

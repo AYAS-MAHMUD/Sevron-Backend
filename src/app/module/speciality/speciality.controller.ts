@@ -13,6 +13,7 @@ const createSpeciality = catchAsync(
             icon : req.file?.path
           }
 // throw new Error("Test error");
+
         const result = await specialityService.createSpeciality(payload) ;
 
         sendResponse(res,{

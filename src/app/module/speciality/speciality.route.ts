@@ -8,7 +8,7 @@ import { createSpecialtySchema } from "./speciality.validation";
 
 const router = Router() ;
 
-router.post("/",multerUpload.single("file"),validationRequest(createSpecialtySchema),specilityController.createSpeciality);
+router.post("/",multerUpload.array("files"),validationRequest(createSpecialtySchema),specilityController.createSpeciality);
 router.get("/",specilityController.getSpeciality);
 
 router.delete("/:id",specilityController.deleteSpeciality);

@@ -23,6 +23,14 @@ const globalErrorHandler = async (
     await deleteImageFromCloudinary(req.file?.path);
   }
 
+  if(req.files && Array.isArray(req.files) && req.files.length > 0 ){
+
+    for(const file of req.files){
+      await deleteImageFromCloudinary(file.path);
+    }
+
+  }
+
   let statusCode: number = err.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
   let message = err.message || "Something went wrong!";
   let error = err;

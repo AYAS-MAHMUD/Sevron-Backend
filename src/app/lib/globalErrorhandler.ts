@@ -4,8 +4,9 @@ import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status-codes";
 import { Prisma } from "../../generated/prisma/client";
 import { config } from "../config/config";
+import { deleteImageFromCloudinary } from "../config/cloudinary.config";
 
-const globalErrorHandler = (
+const globalErrorHandler = async (
   err: any,
   req: Request,
   res: Response,
@@ -17,6 +18,10 @@ const globalErrorHandler = (
     console.log( )
   }
 
+  // if there is a file uploaded error occurs, then delete the file from cloudinary
+  if(req.file){
+    await deleteImageFromCloudinary(req.file?.path);
+  }
 
   let statusCode: number = err.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
   let message = err.message || "Something went wrong!";

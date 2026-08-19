@@ -27,3 +27,26 @@ export interface PrismaCountArgs {
     [key : string] : unknown
 
 }
+
+
+
+export interface PrismaModelDelegate {
+    findMany(args ?: any) : Promise<any[]>;
+    count (args ?: any) : Promise<number>;
+}
+
+export interface IQueryParams {
+    searchTerm ?: string;
+    page?: string;
+    limit?: string;
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
+    fields?: string;
+    includes?: string;
+    [key: string] : string | undefined;
+}
+
+export interface IQueryConfig {
+    searchableFields?: string[];
+    filterableFields?: string[];
+}

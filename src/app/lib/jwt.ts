@@ -15,6 +15,7 @@ export const verifyToken = (token : string , secret : string) => {
     return jwt.verify(token,secret) as JwtPayload
 }
 
+
 // For decode Token
 
 export const decodeToken = (token : string) => {

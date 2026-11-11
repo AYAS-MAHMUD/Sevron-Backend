@@ -15,3 +15,4 @@ router.patch("/:id",authCheck(Role.ADMIN, Role.SUPER_ADMIN),validationRequest(up
 router.delete("/:id",authCheck(Role.ADMIN, Role.SUPER_ADMIN),doctorController.softDeleteDoctorById) // soft delete
 
 export const doctorRouter = router ;
+

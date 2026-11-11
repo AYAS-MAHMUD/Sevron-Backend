@@ -20,7 +20,7 @@ const getAllDoctors  = async () =>{
                 }
             }
         }
-    })
+    }) 
     const totalDoctor = await prisma.doctor.count({
          where : {
             isDeleted : false

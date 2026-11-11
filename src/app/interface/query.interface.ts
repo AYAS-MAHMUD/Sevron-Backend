@@ -1,7 +1,7 @@
 
 
 
-export interface PrismaFindManyQueryBuilder {
+export interface PrismaFindManyArgs {
     where?: Record<string,unknown>,
     include?: Record<string,unknown>,
     select?: Record<string, boolean | Record<string,unknown>>,
@@ -84,4 +84,15 @@ export interface PrismaWhereConditions {
     AND ?: Record<string, unknown>[];
     NOT ?: Record<string, unknown>[];
     [key: string] : unknown;
+}
+
+
+export interface IQueryResult<T>{
+    data : T[];
+    meta : {
+        page : number;
+        limit : number;
+        total : number;
+        totalPages : number;
+    }
 }

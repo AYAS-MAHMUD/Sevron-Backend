@@ -229,6 +229,7 @@ const changePassword = async (
 };
 
 const verifyEmailOTP = async (email: string, otp: string) => {
+  
   const result = await auth.api.verifyEmailOTP({
     body: {
       email,

@@ -12,7 +12,7 @@ router.post("/",multerUpload.array("file"),validationRequest(createSpecialtySche
 router.get("/",specilityController.getSpeciality);
 
 router.delete("/:id",specilityController.deleteSpeciality);
-router.put("/:id",specilityController.updateSpeciality);
+router.patch("/:id",specilityController.updateSpeciality);
 
 
 

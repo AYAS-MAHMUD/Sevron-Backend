@@ -27,7 +27,7 @@ router.get(
 );
 
 
-router.put(
+router.patch(
   "/:id",
   authCheck(Role.ADMIN, Role.SUPER_ADMIN),
   validationRequest(ScheduleValidation.updateScheduleZodSchema),

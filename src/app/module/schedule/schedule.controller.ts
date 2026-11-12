@@ -4,7 +4,7 @@ import { sendResponse } from "../../lib/sendResponse";
 import { scheduleService } from "./schedule.service";
 
 const getAllSchedules = catchAsync(async (req: Request, res: Response) => {
-  const result = await scheduleService.getAllSchedules();
+  const result = await scheduleService.getAllSchedules(req.body);
 
   sendResponse(res, {
     statusCode: 200,
@@ -47,7 +47,7 @@ const updateSchedules = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteSchedules = catchAsync(async (req: Request, res: Response) => {
-    
+
   const result = await scheduleService.deleteSchedules();
 
   sendResponse(res, {

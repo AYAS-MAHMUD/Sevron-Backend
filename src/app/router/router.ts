@@ -33,7 +33,15 @@ const moduleRoutes = [
     {
         path : "/schedule",
         route : scheduleRoute
-    }
+    },
+    {
+        path : "/doctor-schedule",
+        route : scheduleRoute
+    },
+    {
+        path : "/appointment",
+        route : scheduleRoute
+    },
 ]
 
 moduleRoutes.forEach(i=> router.use(i.path,i.route))

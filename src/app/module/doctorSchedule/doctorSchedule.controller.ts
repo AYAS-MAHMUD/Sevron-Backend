@@ -7,10 +7,12 @@ import { IQueryParams } from "../../interface/query.interface";
 
 
 
+
+
 const createMyDoctorSchedule = catchAsync( async (req : Request, res : Response) => {
     const payload = req.body;
     const user = req.user;
-    const doctorSchedule = await DoctorScheduleService.createMyDoctorSchedule(user, payload);
+    const doctorSchedule = await DoctorScheduleService.createMyDoctorSchedule(user , payload);
     sendResponse(res, {
         success: true,
         statusCode : httpStatus.OK,
@@ -27,8 +29,7 @@ const getMyDoctorSchedules = catchAsync(async (req: Request, res: Response) => {
         success: true,
         statusCode : httpStatus.OK,
         message: 'Doctor schedules retrieved successfully',
-        data: result.data,
-        meta: result.meta
+        data: "",
     });
 });
 
@@ -39,8 +40,7 @@ const getAllDoctorSchedules = catchAsync(async (req: Request, res: Response) => 
         success: true,
         statusCode : httpStatus.OK,
         message: 'All doctor schedules retrieved successfully',
-        data: result.data,
-        meta: result.meta
+        data: ""
     });
 });
 
@@ -57,9 +57,10 @@ const getDoctorScheduleById = catchAsync(async (req: Request, res: Response) => 
 });
 
 const updateMyDoctorSchedule = catchAsync( async (req : Request, res : Response) => {
+    const {id} = req.params;
     const payload = req.body;
     const user = req.user;
-    const updatedDoctorSchedule = await DoctorScheduleService.updateMyDoctorSchedule(user, payload);
+    const updatedDoctorSchedule = await DoctorScheduleService.updateMyDoctorSchedule(id as string , user, payload);
     sendResponse(res, {
         success: true,
         statusCode : httpStatus.OK,

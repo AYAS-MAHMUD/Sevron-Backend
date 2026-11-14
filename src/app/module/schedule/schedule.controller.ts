@@ -3,8 +3,24 @@ import catchAsync from "../../lib/catchAsync";
 import { sendResponse } from "../../lib/sendResponse";
 import { scheduleService } from "./schedule.service";
 
+
+
+const createSchedules = catchAsync(async (req: Request, res: Response) => {
+  const payload = req.body;
+
+  const result = await scheduleService.createSchedules(payload);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Schedule post successfully",
+    data: result,
+  });
+});
+
+
 const getAllSchedules = catchAsync(async (req: Request, res: Response) => {
-  const result = await scheduleService.getAllSchedules(req.body);
+  const result = await scheduleService.getAllSchedules();
 
   sendResponse(res, {
     statusCode: 200,
@@ -15,7 +31,8 @@ const getAllSchedules = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getSchedulesById = catchAsync(async (req: Request, res: Response) => {
-  const result = await scheduleService.getSchedulesById();
+  const { id } = req.params;
+  const result = await scheduleService.getSchedulesById(id as string);
 
   sendResponse(res, {
     statusCode: 200,
@@ -25,18 +42,13 @@ const getSchedulesById = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const createSchedules = catchAsync(async (req: Request, res: Response) => {
-  const result = await scheduleService.createSchedules();
 
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: "Schedule post successfully",
-    data: result,
-  });
-});
+
 const updateSchedules = catchAsync(async (req: Request, res: Response) => {
-  const result = await scheduleService.updateSchedules();
+  const {id} = req.params;
+  const payload = req.body;
+
+  const result = await scheduleService.updateSchedules(id as string, payload);
 
   sendResponse(res, {
     statusCode: 200,
@@ -47,8 +59,8 @@ const updateSchedules = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteSchedules = catchAsync(async (req: Request, res: Response) => {
-
-  const result = await scheduleService.deleteSchedules();
+  const {id}  = req.params;
+  const result = await scheduleService.deleteSchedules(id as string);
 
   sendResponse(res, {
     statusCode: 200,

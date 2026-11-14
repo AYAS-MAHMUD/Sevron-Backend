@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import catchAsync from "../../lib/catchAsync";
 import { sendResponse } from "../../lib/sendResponse";
 import { scheduleService } from "./schedule.service";
+import { IQueryParams } from "../../interface/query.interface";
 
 
 
@@ -20,7 +21,9 @@ const createSchedules = catchAsync(async (req: Request, res: Response) => {
 
 
 const getAllSchedules = catchAsync(async (req: Request, res: Response) => {
-  const result = await scheduleService.getAllSchedules();
+  const query = req.query;
+
+  const result = await scheduleService.getAllSchedules(query as IQueryParams);
 
   sendResponse(res, {
     statusCode: 200,

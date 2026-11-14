@@ -20,6 +20,16 @@ const createMyDoctorSchedule = catchAsync( async (req : Request, res : Response)
         data: doctorSchedule
     });
 });
+const getAllDoctorSchedules = catchAsync(async (req: Request, res: Response) => {
+    const query = req.query;
+    const result  = await DoctorScheduleService.getAllDoctorSchedules(query as IQueryParams);
+    sendResponse(res, {
+        success: true,
+        statusCode : httpStatus.OK,
+        message: 'All doctor schedules retrieved successfully',
+        data: result
+    });
+});
 
 const getMyDoctorSchedules = catchAsync(async (req: Request, res: Response) => {
     const user = req.user;
@@ -33,16 +43,6 @@ const getMyDoctorSchedules = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-const getAllDoctorSchedules = catchAsync(async (req: Request, res: Response) => {
-    const query = req.query;
-    const result  = await DoctorScheduleService.getAllDoctorSchedules(query as IQueryParams);
-    sendResponse(res, {
-        success: true,
-        statusCode : httpStatus.OK,
-        message: 'All doctor schedules retrieved successfully',
-        data: ""
-    });
-});
 
 const getDoctorScheduleById = catchAsync(async (req: Request, res: Response) => {
     const doctorId = req.params.doctorId;

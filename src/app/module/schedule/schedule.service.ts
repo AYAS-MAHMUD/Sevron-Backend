@@ -2,6 +2,15 @@ import { addHours, addMinutes, format } from "date-fns";
 import { ICreateSchedulePayload } from "./schedule.interface";
 import { convertDatetime } from "./schedule.utils";
 import { prisma } from "../../lib/prisma";
+import { QueryBuilder } from "../../utils/queryBuilders";
+import { Prisma, Schedule } from "../../../generated/prisma/browser";
+import {
+  scheduleFilterableFields,
+  scheduleIncludeConfig,
+  scheduleSearchableFields,
+} from "./schedule.constant";
+
+import { IQueryParams } from "../../interface/query.interface";
 
 const createSchedules = async (payload: ICreateSchedulePayload) => {
   const { startDate, endDate, startTime, endTime } = payload;
@@ -61,22 +70,26 @@ const createSchedules = async (payload: ICreateSchedulePayload) => {
   return schedules;
 };
 
-const getAllSchedules = async () => {
-  const schedules = await prisma.schedule.findMany({
-    include: {
-      doctorSchedules: {
-        include: {
-          doctor: true,
-        },
-      },
-      appointments: true,
-    },
-    orderBy: {
-      startDateTime: "asc",
-    },
+const getAllSchedules = async (query : IQueryParams) => {
+  const queryBuilder = new QueryBuilder<
+    Schedule,
+    Prisma.ScheduleWhereInput,
+    Prisma.ScheduleInclude
+  >(prisma.schedule, query, {
+    searchableFields: scheduleSearchableFields,
+    filterableFields: scheduleFilterableFields,
   });
 
-  return schedules;
+  const result = await queryBuilder
+    .search()
+    .filter()
+    .paginate()
+    .dynamicInclude(scheduleIncludeConfig)
+    .sort()
+    .fields()
+    .execute();
+
+  return result;
 };
 
 const getSchedulesById = async (id: string) => {
@@ -94,7 +107,7 @@ const getSchedulesById = async (id: string) => {
     },
   });
 
-    if (!schedule) {
+  if (!schedule) {
     throw new Error("Schedule not found");
   }
   return schedule;

@@ -57,10 +57,9 @@ const getDoctorScheduleById = catchAsync(async (req: Request, res: Response) => 
 });
 
 const updateMyDoctorSchedule = catchAsync( async (req : Request, res : Response) => {
-    const {id} = req.params;
     const payload = req.body;
     const user = req.user;
-    const updatedDoctorSchedule = await DoctorScheduleService.updateMyDoctorSchedule(id as string , user, payload);
+    const updatedDoctorSchedule = await DoctorScheduleService.updateMyDoctorSchedule(user, payload);
     sendResponse(res, {
         success: true,
         statusCode : httpStatus.OK,

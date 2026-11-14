@@ -1,0 +1,115 @@
+import { addHours, addMinutes, format } from "date-fns";
+import { convertDatetime } from "./schedule.utils";
+import { prisma } from "../../lib/prisma";
+const createSchedules = async (payload) => {
+    const { startDate, endDate, startTime, endTime } = payload;
+    const interval = 30;
+    const currentDate = new Date(startDate);
+    const lastDate = new Date(endDate);
+    const schedules = [];
+    while (currentDate <= lastDate) {
+        const startDateTime = new Date(addMinutes(addHours(`${format(currentDate, "yyyy-MM-dd ")}`, Number(startTime.split(":")[0])), Number(startTime.split(":")[1])));
+        const endDateTime = new Date(addMinutes(addHours(`${format(currentDate, "yyyy-MM-dd ")}`, Number(endTime.split(":")[0])), Number(endTime.split(":")[1])));
+        while (startDateTime < endDateTime) {
+            const start = await convertDatetime(startDateTime);
+            const end = await convertDatetime(addMinutes(startDateTime, interval));
+            const scheduleData = {
+                startDateTime: start,
+                endDateTime: end,
+            };
+            const existingSchedule = await prisma.schedule.findFirst({
+                where: {
+                    startDateTime: scheduleData.startDateTime,
+                    endDateTime: scheduleData.endDateTime,
+                },
+            });
+            if (!existingSchedule) {
+                const result = await prisma.schedule.create({
+                    data: scheduleData,
+                });
+                schedules.push(result);
+            }
+            startDateTime.setMinutes(startDateTime.getMinutes() + interval);
+        }
+        startDateTime.setDate(currentDate.getDate() + 1);
+    }
+    return schedules;
+};
+const getAllSchedules = async () => {
+    const schedules = await prisma.schedule.findMany({
+        include: {
+            doctorSchedules: {
+                include: {
+                    doctor: true,
+                },
+            },
+            appointments: true,
+        },
+        orderBy: {
+            startDateTime: "asc",
+        },
+    });
+    return schedules;
+};
+const getSchedulesById = async (id) => {
+    const schedule = await prisma.schedule.findUnique({
+        where: {
+            id,
+        },
+        include: {
+            doctorSchedules: {
+                include: {
+                    doctor: true,
+                },
+            },
+            appointments: true,
+        },
+    });
+    if (!schedule) {
+        throw new Error("Schedule not found");
+    }
+    return schedule;
+};
+const updateSchedules = async (id, payload) => {
+    const existingSchedule = await prisma.schedule.findUnique({
+        where: {
+            id,
+        },
+    });
+    if (!existingSchedule) {
+        throw new Error("Schedule not found");
+    }
+    const updatedSchedule = await prisma.schedule.update({
+        where: {
+            id,
+        },
+        data: payload,
+        include: {
+            doctorSchedules: true,
+        },
+    });
+    return updatedSchedule;
+};
+const deleteSchedules = async (id) => {
+    const existingSchedule = await prisma.schedule.findUnique({
+        where: {
+            id,
+        },
+    });
+    if (!existingSchedule) {
+        throw new Error("Schedule not found");
+    }
+    const deletedSchedule = await prisma.schedule.delete({
+        where: {
+            id,
+        },
+    });
+    return deletedSchedule;
+};
+export const scheduleService = {
+    getAllSchedules,
+    getSchedulesById,
+    createSchedules,
+    updateSchedules,
+    deleteSchedules,
+};

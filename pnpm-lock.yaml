@@ -267,6 +267,9 @@ importers:
       prisma:
         specifier: ^7.9.0
         version: 7.9.0(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@7.0.2)
+      stripe:
+        specifier: ^23.1.0
+        version: 23.1.0(@types/node@26.1.1)
       zod:
         specifier: ^4.4.3
         version: 4.4.3
@@ -2277,6 +2280,15 @@ packages:
     resolution: {integrity: sha512-4gB8na07fecVVkOI6Rs4e7T6NOTki5EmL7TUduTs6bu3EdnSycntVJ4re8kgZA+wx9IueI2Y11bfbgwtzuE0KQ==}
     engines: {node: '>=0.10.0'}
 
+  stripe@23.1.0:
+    resolution: {integrity: sha512-fVUfMSfTPoukfoV//MUKAx2+YxyKmYaYtnAL9VkfnHfaPNQylFdWZMD+zgUFerI8rjbaiER8Vzj2XEUQ2AhAsQ==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@types/node': '>=20'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
   supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
@@ -4266,6 +4278,10 @@ snapshots:
   strip-bom@3.0.0: {}
 
   strip-json-comments@2.0.1: {}
+
+  stripe@23.1.0(@types/node@26.1.1):
+    optionalDependencies:
+      '@types/node': 26.1.1
 
   supports-preserve-symlinks-flag@1.0.0: {}
 

@@ -180,7 +180,17 @@ const getMySingleAppointment = async (appointmentId: string, user: any) => {
     return appointment;
 };
 
-const getAllAppointments = async () => {};
+const getAllAppointments = async () => {
+    const appointments = await prisma.appointment.findMany({
+        include: {
+            doctor: true,
+            patient: true,
+            schedule: true
+        }
+    });
+    return appointments;
+};
+
 const bookAppointmentWithPayLater = async () => {};
 const initiatePayment = async () => {};
 

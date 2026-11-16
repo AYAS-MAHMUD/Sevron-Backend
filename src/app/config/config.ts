@@ -29,6 +29,8 @@ const requiredEnv = [
   "CLOUDINARY_CLOUD_NAME",
   "CLOUDINARY_API_KEY",
   "CLOUDINARY_API_SECRET",
+  "STRIPE_SECRET_KEY",
+  "STRIPE_WEBHOOK_SECRET"
 ] as const;
 
 requiredEnv.forEach((key) => {
@@ -71,4 +73,8 @@ export const config = Object.freeze({
     cloudinary_api_key: process.env.CLOUDINARY_API_KEY,
     cloudinary_api_secret: process.env.CLOUDINARY_API_SECRET,
   },
+  stripe : {
+    stripe_secret_key : process.env.STRIPE_SECRET_KEY,
+    stripe_webhook_key : process.env.STRIPE_WEBHOOK_SECRET,
+  }
 });

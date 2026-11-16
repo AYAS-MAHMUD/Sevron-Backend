@@ -10,7 +10,8 @@
     "lint": "eslint ./src --ext .ts",
     "migrate": "prisma migrate dev",
     "generate": "prisma generate",
-    "studio": "prisma studio"
+    "studio": "prisma studio",
+    "stripe:webhook" : "stripe listen --events checkout.session.completed,payment_intent.succeeded,payment_intent.payment_failed --forward-to localhost:3000/webhook"
   },
   "keywords": [],
   "author": "",

@@ -31,11 +31,11 @@ const bookAppointment = async (payload: IBookAppointmentPayload, user: any) => {
         doctorId: doctorData.id,
       },
     },
-  });
+  }); 
 
-  const videoCallingId = String(uuidv7());
+const videoCallingId = String(uuidv7());
 
-  const result = await prisma.$transaction(async (tx) => {
+const result = await prisma.$transaction(async (tx) => {
     const appointmentData = await tx.appointment.create({
       data: {
         doctorId: payload.doctorId,

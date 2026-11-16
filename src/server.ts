@@ -3,6 +3,7 @@ import http from "http"
 import app from "./app.js";
 import { prisma } from "./app/lib/prisma.js";
 import { config } from "./app/config/config.js";
+import { seedSuperAdmin } from "./app/utils/superAdminSeed.js";
 
 
 let server : http.Server ;
@@ -12,7 +13,7 @@ async function botstrap(){
   try {
     await prisma.$connect();
     console.log("Database Connected");
-
+    await seedSuperAdmin();
     server = app.listen(config.PORT,()=>{
       console.log("Server running successfully on port 3000");
     })

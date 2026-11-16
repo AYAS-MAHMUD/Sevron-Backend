@@ -70,6 +70,9 @@ const createSchedules = async (payload: ICreateSchedulePayload) => {
   return schedules;
 };
 
+
+
+
 const getAllSchedules = async (query : IQueryParams) => {
   const queryBuilder = new QueryBuilder<
     Schedule,

@@ -89,3 +89,8 @@ const handleStripeWebhookEvent = async (event: Stripe.Event) => {
   }
   return {message : `Event ${event.id} processed successfully`}
 };
+
+
+export const PaymentService = {
+    handleStripeWebhookEvent 
+}

@@ -8,6 +8,7 @@ import globalErrorHandler from "./app/lib/globalErrorhandler";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./app/lib/auth";
 import path from "path";
+import { PaymentController } from "./app/module/payment/payment.controller";
 
 const app: Application = express();
 
@@ -23,11 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 
-app.post("/webhook", express.raw({type: "application/json"}), (req: Request, res: Response) => {
-  // Handle the webhook event here
-  console.log("Webhook received:", req.body);
-  res.status(200).json({ received: true });
-});
+app.post("/webhook", express.raw({type: "application/json"}), PaymentController.handleStripeWebhookEvent);
 
 // cors
 app.use(

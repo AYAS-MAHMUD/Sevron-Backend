@@ -1,0 +1,60 @@
+import { Request, Response } from "express";
+import catchAsync from "../../lib/catchAsync";
+import { config } from "../../config/config";
+import status from "http-status";
+import { stripe } from "../../config/stripe.config";
+import { sendResponse } from "../../lib/sendResponse";
+import { PaymentService } from "./payment.service";
+
+
+
+ 
+const handleStripeWebhookEvent = catchAsync(
+  async (req: Request, res: Response) => {
+    const signature = req.headers["stripe-signature"] as string;
+    const webhookSecret = config.stripe.stripe_secret_key ;
+
+        if(!signature || !webhookSecret){
+        console.error("Missing Stripe signature or webhook secret");
+        return res.status(status.BAD_REQUEST).json({message : "Missing Stripe signature or webhook secret"})
+    }
+
+
+    let event ;
+    try {
+        event = stripe.webhooks.constructEvent(req.body , signature , webhookSecret)
+    } catch (error ) {
+         console.error("Error processing Stripe webhook:", error);
+        return res.status(status.BAD_REQUEST).json({message : "Error processing Stripe webhook"})
+    }
+
+        try {
+        const result = await PaymentService.handleStripeWebhookEvent(event);
+
+        sendResponse(res, {
+            statusCode : status.OK,
+            success : true,
+            message : "Stripe webhook event processed successfully",
+            data : result
+        })
+    } catch (error : any) {
+        console.error("Error handling Stripe webhook event:", error);
+        sendResponse(res, {
+            statusCode : status.INTERNAL_SERVER_ERROR,
+            success : false,
+            message : "Error handling Stripe webhook event",
+            data : ""
+        })
+    }
+
+
+
+
+  },
+);
+
+
+
+export const PaymentController = {
+    handleStripeWebhookEvent
+}

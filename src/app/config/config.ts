@@ -7,6 +7,7 @@ dotenv.config({ path: path.join(process.cwd(), ".env") });
 
 const requiredEnv = [
   "PORT",
+  "FRONTEND_URL",
   "DATABASE_URL",
   "NODE_ENV",
   "JWT_ACCESS_SECRET",
@@ -46,6 +47,7 @@ export const config = Object.freeze({
   NODE_ENV: process.env.NODE_ENV,
   PORT: Number(process.env.PORT),
   DATABASE_URL: process.env.DATABASE_URL!,
+  FRONTEND_URL : process.env.FRONTEND_URL,
   better_auth_url: process.env.BETTER_AUTH_URL,
   frontend_url: process.env.FRONTEND_URL,
   better_auth_secret: process.env.BETTER_AUTH_SECRET,

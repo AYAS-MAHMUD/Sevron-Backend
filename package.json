@@ -11,7 +11,7 @@
     "migrate": "prisma migrate dev",
     "generate": "prisma generate",
     "studio": "prisma studio",
-    "stripe:webhook" : "stripe listen --events checkout.session.completed,payment_intent.succeeded,payment_intent.payment_failed --forward-to localhost:3000/webhook"
+    "stripe:webhook": "stripe listen --events checkout.session.completed,payment_intent.succeeded,payment_intent.payment_failed --forward-to localhost:3000/webhook"
   },
   "keywords": [],
   "author": "",
@@ -42,6 +42,7 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.2.0",
     "multer-storage-cloudinary": "^4.0.0",
+    "node-cron": "^4.6.0",
     "nodemailer": "^9.0.4",
     "pg": "^8.22.0",
     "prisma": "^7.9.0",

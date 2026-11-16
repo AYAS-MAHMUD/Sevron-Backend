@@ -86,7 +86,7 @@ const initiatePayment = catchAsync(async (req: Request, res: Response) => {
 
     sendResponse(res, {
         success: true,
-        statusCode: status.OK,
+        statusCode: status.OK, 
         message: 'Payment initiated successfully',
         data: paymentInfo
     });

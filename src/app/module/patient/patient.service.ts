@@ -1,10 +1,12 @@
+import { deleteImageFromCloudinary } from "../../config/cloudinary.config";
 import { prisma } from "../../lib/prisma";
 import { IUpdatePatientHealthDataPayload, IUpdatePatientProfilePayload } from "./patient.interface";
 import { convertToDateTime } from "./patient.util";
 
 
 const updateMyProfile = async (user : any , payload : IUpdatePatientProfilePayload) => {
-    // throw new Error("This is an intentional error to test Sentry integration in the backend.");
+        console.log("paylad : ",payload , "user : ",user)
+
     const patientData = await prisma.patient.findUniqueOrThrow({
         where : {
             email : user.email
@@ -77,7 +79,7 @@ const updateMyProfile = async (user : any , payload : IUpdatePatientProfilePaylo
                     });
 
                     if(deletedReport.reportLink){
-                        // await deleteFileFromCloudinary(deletedReport.reportLink);
+                        await deleteImageFromCloudinary(deletedReport.reportLink);
                     }
                 }else if(report.reportName && report.reportLink){
                     await tx.medicalReport.create({
@@ -105,6 +107,8 @@ const updateMyProfile = async (user : any , payload : IUpdatePatientProfilePaylo
 
     return result;
 };
+
+
 
 export const PatientService = {
     updateMyProfile,

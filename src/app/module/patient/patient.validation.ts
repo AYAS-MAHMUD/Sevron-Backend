@@ -2,6 +2,9 @@ import z from "zod";
 import { BloodGroup, Gender } from "../../../generated/prisma/enums";
 
 const updatePatientProfileZodSchema = z.object({
+    body : z.object({
+        
+    
     patientInfo : z.object({
         name : z.string("Name must be a string").min(1, "Name cannot be empty").max(100, "Name must be less than 100 characters").optional(),
         profilePhoto : z.url("Profile photo must be a valid URL").optional(),
@@ -63,6 +66,7 @@ const updatePatientProfileZodSchema = z.object({
         }
     }, {
         message : "Invalid medical report data. If shouldDelete is true, reportId must be provided. If reportId is provided, shouldDelete must be true. If reportName is provided, reportLink must also be provided and vice versa."
+    })
     })
 })
 

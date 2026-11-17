@@ -16,6 +16,7 @@ router.get(
   authCheck(Role.DOCTOR),
   DoctorScheduleController.getMyDoctorSchedules,
 );
+
 router.get(
   "/",
   authCheck(Role.ADMIN, Role.SUPER_ADMIN),

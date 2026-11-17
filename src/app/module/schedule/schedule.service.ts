@@ -12,65 +12,69 @@ import {
 
 import { IQueryParams } from "../../interface/query.interface";
 
-const createSchedules = async (payload: ICreateSchedulePayload) => {
-  const { startDate, endDate, startTime, endTime } = payload;
+const createSchedules= async (payload: ICreateSchedulePayload) =>{
+    const { startDate, endDate, startTime, endTime } = payload;
 
-  const interval = 30;
-  const currentDate = new Date(startDate);
-  const lastDate = new Date(endDate);
+    const interval = 30;
 
-  const schedules = [];
+    const currentDate = new Date(startDate);
+    const lastDate = new Date(endDate);
 
-  while (currentDate <= lastDate) {
-    const startDateTime = new Date(
-      addMinutes(
-        addHours(
-          `${format(currentDate, "yyyy-MM-dd ")}`,
-          Number(startTime.split(":")[0]),
-        ),
-        Number(startTime.split(":")[1]),
-      ),
-    );
-    const endDateTime = new Date(
-      addMinutes(
-        addHours(
-          `${format(currentDate, "yyyy-MM-dd ")}`,
-          Number(endTime.split(":")[0]),
-        ),
-        Number(endTime.split(":")[1]),
-      ),
-    );
+    const schedules = [];
 
-    while (startDateTime < endDateTime) {
-      const start = await convertDatetime(startDateTime);
-      const end = await convertDatetime(addMinutes(startDateTime, interval));
+    while (currentDate <= lastDate) {
+        const startDateTime = new Date(
+            addMinutes(
+                addHours(
+                    `${format(currentDate, "yyyy-MM-dd")}`,
+                    Number(startTime.split(":")[0])
+                ),
+                Number(startTime.split(":")[1])
+            )
+        );
 
-      const scheduleData = {
-        startDateTime: start,
-        endDateTime: end,
-      };
+        const endDateTime = new Date(
+            addMinutes(
+                addHours(
+                    `${format(currentDate, "yyyy-MM-dd")}`,
+                    Number(endTime.split(":")[0])
+                ),
+                Number(endTime.split(":")[1])
+            )
+        );
 
-      const existingSchedule = await prisma.schedule.findFirst({
-        where: {
-          startDateTime: scheduleData.startDateTime,
-          endDateTime: scheduleData.endDateTime,
-        },
-      });
-      if (!existingSchedule) {
-        const result = await prisma.schedule.create({
-          data: scheduleData,
-        });
-        schedules.push(result);
-      }
-      startDateTime.setMinutes(startDateTime.getMinutes() + interval);
+        while (startDateTime < endDateTime) {
+            const s = await convertDatetime(startDateTime);
+            const e = await convertDatetime(addMinutes(startDateTime, interval));
+
+            const scheduleData = {
+                startDateTime: s,
+                endDateTime: e
+            }
+
+            const existingSchedule = await prisma.schedule.findFirst({
+                where: {
+                    startDateTime: scheduleData.startDateTime,
+                    endDateTime: scheduleData.endDateTime
+                }
+            })
+
+            if (!existingSchedule) {
+                const result = await prisma.schedule.create({
+                    data: scheduleData
+                })
+                console.log(result);
+                schedules.push(result);
+            }
+
+            startDateTime.setMinutes(startDateTime.getMinutes() + interval)
+        }
+
+        currentDate.setDate(currentDate.getDate() + 1);
     }
-    startDateTime.setDate(currentDate.getDate() + 1);
-  }
 
-  return schedules;
-};
-
-
+    return schedules;
+}
 
 
 const getAllSchedules = async (query : IQueryParams) => {

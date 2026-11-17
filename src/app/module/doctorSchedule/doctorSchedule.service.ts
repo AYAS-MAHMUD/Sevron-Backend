@@ -20,6 +20,7 @@ const createMyDoctorSchedule = async (user : any, payload : ICreateDoctorSchedul
         doctorId : doctorData.id,
         scheduleId
     }))
+
     const result = await prisma.doctorSchedules.createMany({
         data : doctorScheduleData
     })
@@ -30,12 +31,12 @@ const createMyDoctorSchedule = async (user : any, payload : ICreateDoctorSchedul
 
 
 const getMyDoctorSchedules = async (user : any, query : IQueryParams) => {
-
-        const doctorData = await prisma.doctor.findUniqueOrThrow({
+    const doctorData = await prisma.doctor.findUniqueOrThrow({
         where:{
             email : user.email
         }
     });
+    
     const queryBuilder = new QueryBuilder<DoctorSchedules, Prisma.DoctorSchedulesWhereInput, Prisma.DoctorSchedulesInclude>(prisma.doctorSchedules,
     {
     doctorId: doctorData.id,
@@ -61,8 +62,11 @@ const getMyDoctorSchedules = async (user : any, query : IQueryParams) => {
     .fields()
     .dynamicInclude(doctorScheduleIncludeConfig)
     .execute();
+
+
     return doctorSchedules;
 }
+
 
 
 

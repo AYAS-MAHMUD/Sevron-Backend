@@ -1,7 +1,3 @@
-
-
-
-
 import { Router } from "express";
 import { authCheck } from "../../middleware/authCheck";
 import { Role } from "../../../generated/prisma/enums";

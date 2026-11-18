@@ -10,7 +10,7 @@ import { AppointmentService } from "./appointment.service";
 const bookAppointment = catchAsync( async (req : Request, res : Response) => {
     const payload = req.body;
     const user = req.user;
-    console.log("user : ",user , "Payload :",payload);
+    // console.log("user : ",user , "Payload :",payload);
     const appointment = await AppointmentService.bookAppointment(payload, user);
     sendResponse(res, {
         success: true,

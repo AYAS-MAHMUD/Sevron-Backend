@@ -21,12 +21,12 @@ app.set("view engine","ejs");
 app.set("views",path.resolve(process.cwd() ,`src/app/templates`))
 
 // parsers
+app.post("/webhook", express.raw({type: "application/json"}), PaymentController.handleStripeWebhookEvent);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 
-app.post("/webhook", express.raw({type: "application/json"}), PaymentController.handleStripeWebhookEvent);
 
 // cors
 app.use(

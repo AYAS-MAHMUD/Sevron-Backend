@@ -5,31 +5,31 @@ import status from "http-status";
 import { stripe } from "../../config/stripe.config";
 import { sendResponse } from "../../lib/sendResponse";
 import { PaymentService } from "./payment.service";
+import { Stripe } from "stripe";
 
 
 
- 
-const handleStripeWebhookEvent = catchAsync(
-  async (req: Request, res: Response) => {
-    const signature = req.headers["stripe-signature"] as string;
-    const webhookSecret = config.stripe.stripe_secret_key ;
 
-        if(!signature || !webhookSecret){
+const handleStripeWebhookEvent = catchAsync(async (req : Request, res : Response) => {
+    const signature = req.headers['stripe-signature'] as string
+    const webhookSecret = config.stripe.stripe_webhook_key;
+
+    if(!signature || !webhookSecret){
         console.error("Missing Stripe signature or webhook secret");
         return res.status(status.BAD_REQUEST).json({message : "Missing Stripe signature or webhook secret"})
     }
 
+    let event;
 
-    let event ;
     try {
-        event = stripe.webhooks.constructEvent(req.body , signature , webhookSecret)
-    } catch (error ) {
-         console.error("Error processing Stripe webhook:", error);
+        event = stripe.webhooks.constructEvent(req.body, signature, webhookSecret);
+    } catch (error : any) {
+        console.error("Error processing Stripe webhook:", error);
         return res.status(status.BAD_REQUEST).json({message : "Error processing Stripe webhook"})
     }
 
-        try {
-        const result = await PaymentService.handleStripeWebhookEvent(event);
+    try {
+        const result = await PaymentService.handlerStripeWebhookEvent(event);
 
         sendResponse(res, {
             statusCode : status.OK,
@@ -37,23 +37,16 @@ const handleStripeWebhookEvent = catchAsync(
             message : "Stripe webhook event processed successfully",
             data : result
         })
-    } catch (error : any) {
+    } catch (error) {
         console.error("Error handling Stripe webhook event:", error);
         sendResponse(res, {
             statusCode : status.INTERNAL_SERVER_ERROR,
             success : false,
             message : "Error handling Stripe webhook event",
-            data : ""
+            data : null
         })
     }
-
-
-
-
-  },
-);
-
-
+})
 
 export const PaymentController = {
     handleStripeWebhookEvent
